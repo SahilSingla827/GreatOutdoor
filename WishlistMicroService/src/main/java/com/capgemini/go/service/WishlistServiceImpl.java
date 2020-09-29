@@ -1,6 +1,7 @@
 package com.capgemini.go.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -80,14 +81,14 @@ public class WishlistServiceImpl implements WishlistService{
 		{
 			List<String> productIdsList = new ArrayList<>();
 			List<WishlistDto>userWishlist = wishlistDao.findByWishUserId(userId);
-			List<ProductDto>products = new ArrayList<>();
+			ProductDto[] products;
 			for(WishlistDto wishlistProduct :userWishlist )
 			{
 				productIdsList.add(wishlistProduct.getProductId());
 			}
-			products = new RestTemplate().postForObject("http://localhost:9090/getProductsList",productIdsList,List.class);
+			products = new RestTemplate().postForObject("http://localhost:9090/getProductsList",productIdsList,ProductDto[].class);
 			
-			return products;
+			return Arrays.asList(products);
 		}
 		else
 		{

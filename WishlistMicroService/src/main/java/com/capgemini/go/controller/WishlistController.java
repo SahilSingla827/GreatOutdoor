@@ -20,9 +20,14 @@ import com.capgemini.go.dto.Wish;
 import com.capgemini.go.dto.WishlistDto;
 import com.capgemini.go.service.WishlistService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 
 
 @RestController
+@Api("Wishlist Management Service")
 public class WishlistController {
 	String productId;
 	String userId;
@@ -33,7 +38,8 @@ public class WishlistController {
 	Logger logger=LoggerFactory.getLogger(this.getClass());
 	
 	@PostMapping(value = "/addProductToWishlist",consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addProductToWishlist(@RequestBody Wish wishedProduct)
+	@ApiOperation(value = "Add product to Wishlist")
+	public ResponseEntity<String> addProductToWishlist(@ApiParam(value="Wish in json format")@RequestBody Wish wishedProduct)
 	{
 		logger.info("Adding product to wishlist");
 		WishlistDto w = new WishlistDto(wishedProduct);
@@ -42,7 +48,8 @@ public class WishlistController {
 	}
 	
 	@DeleteMapping(value = "/removeProductFromWishlist")
-	public ResponseEntity<String> removeProductFromWishlist(@RequestBody Wish wishedProduct)
+	@ApiOperation(value = "Remove Product From Wishist")
+	public ResponseEntity<String> removeProductFromWishlist(@ApiParam(value="Wish in json format")@RequestBody Wish wishedProduct)
 	{
 		logger.info("Removing product from wishlist");
 		WishlistDto w = new WishlistDto(wishedProduct);
@@ -51,7 +58,8 @@ public class WishlistController {
 	}
 	
 	@GetMapping(value="allWishlistProducts/{userId}")
-	public ResponseEntity<List<ProductDto>> viewAllProductsInWishlist(@PathVariable String userId)
+	@ApiOperation(value = "Get All Products In User Wishlist")
+	public ResponseEntity<List<ProductDto>> viewAllProductsInWishlist( @ApiParam(value="UserId of the user")@PathVariable String userId)
 	{
 		logger.info("Displaying All products in User wishlist");
 		List<ProductDto> productsList = wishService.viewAllProductsInWishlist(userId);

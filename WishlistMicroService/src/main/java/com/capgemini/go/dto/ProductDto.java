@@ -56,8 +56,8 @@ public class ProductDto {
 	public ProductDto() {
 		super();
 	}
-	public ProductDto(String productId, String productName, String category, String description,double price, String manufacturer
-			) {
+	public ProductDto(String productId, String productName, String category, String description, double price,
+			String manufacturer) {
 		super();
 		this.productId = productId;
 		this.productName = productName;

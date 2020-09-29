@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import com.capgemini.go.dao.ProductRepo;
+
 import com.capgemini.go.dao.WishlistDao;
 import com.capgemini.go.dto.ProductDto;
 import com.capgemini.go.dto.WishlistDto;
@@ -23,8 +24,6 @@ public class WishlistServiceImpl implements WishlistService{
 	@Autowired
 	WishlistDao wishlistDao;
 	
-	@Autowired
-	ProductRepo productDao;
 	
 	WishlistDto wishedProduct ;
 
@@ -79,13 +78,15 @@ public class WishlistServiceImpl implements WishlistService{
 		boolean userExist = findUserInWishlist(userId);
 		if(userExist)
 		{
+			List<String> productIdsList = new ArrayList<>();
 			List<WishlistDto>userWishlist = wishlistDao.findByWishUserId(userId);
 			List<ProductDto>products = new ArrayList<>();
 			for(WishlistDto wishlistProduct :userWishlist )
 			{
-				ProductDto product = productDao.findByProductId(wishlistProduct.getProductId());
-				products.add(product);
+				productIdsList.add(wishlistProduct.getProductId());
 			}
+			products = new RestTemplate().postForObject("http://localhost:9090/getProductsList",productIdsList,List.class);
+			
 			return products;
 		}
 		else
